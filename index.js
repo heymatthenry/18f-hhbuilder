@@ -18,12 +18,18 @@ const formLib = {
   },
 
   validateAge: function (age) {
-    return age > 0;
+    const isValid = age > 0;
+    const ageField = document.forms[0].elements.age;
+    ageField.style = isValid ? "" : "border: 1px dashed red";
+    return isValid;
   },
 
   validateRelationship: function (rel) {
     const relationships = ["self", "spouse", "child", "parent", "grandparent", "other"];
-    return relationships.includes(rel);
+    const isValid = relationships.includes(rel);
+    const relField = document.forms[0].elements.rel;
+    relField.style = isValid ? "" : "border: 1px dashed red";
+    return isValid;
   },
 
   attachEvents: function () {
