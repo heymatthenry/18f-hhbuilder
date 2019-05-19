@@ -103,35 +103,25 @@ const formLib = {
   },
 
   addHHMember: function (hhObj) {
-    let tbl = document.getElementById('hh-members');
+    let ol = document.getElementsByClassName('household')[0];
 
-    if (!tbl) {
-      this.createHHTable();
-      tbl = document.getElementById('hh-members');
-    }
-
-    const tr = document.createElement('tr');
-    tr.setAttribute("data-hhid", hhObj.hhid);
-
-    ["age", "rel", "smoker"].map((prop) => {
-      const td = document.createElement('td');
-      td.innerText = hhObj[prop];
-      tr.appendChild(td);
-    })
+    const li = document.createElement('li');
+    li.setAttribute("data-hhid", hhObj.hhid);
+    li.innerText = hhObj.age + ' ' + hhObj.rel + ' ' + hhObj.smoker;
 
     const btnRemove = document.createElement('button');
     btnRemove.setAttribute('type', 'button');
     btnRemove.innerText = 'Remove';
     btnRemove.addEventListener('click', function () { formLib.removeHHMember(hhObj.hhid) });
 
-    tr.appendChild(btnRemove);
-    tbl.appendChild(tr);
+    li.appendChild(btnRemove);
+    ol.appendChild(li);
     this.household.push(hhObj);
   },
 
   removeHHMember(id) {
-    const tr = document.querySelector("tr[data-hhid='" + id + "']");
-    tr.parentNode.removeChild(tr)
+    const li = document.querySelector("li[data-hhid='" + id + "']");
+    li.parentNode.removeChild(li)
     this.household.map((mem, i) => {
       if ((mem.hhid) === id) {
         formLib.household.splice(i, 1);
