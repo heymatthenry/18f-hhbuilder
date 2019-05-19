@@ -1,7 +1,7 @@
 /* use strict */
-const household = [];
-
 const formLib = {
+  household: [],
+
   init: function () {
     this.attachEvents();
     this.initializeDom();
@@ -91,14 +91,18 @@ const formLib = {
 
     tr.appendChild(btnRemove);
     tbl.appendChild(tr);
-    household.push(hhObj);
+    this.household.push(hhObj);
   },
 
   removeHHMember(id) {
     const tr = document.querySelector("tr[data-hhid='" + id + "']");
     tr.parentNode.removeChild(tr)
+    this.household.map((mem, i) => {
+      if ((mem.hhid) === id) {
+        formLib.household.splice(i, 1);
+      }
+    })
   }
-
 };
 
 formLib.init();
