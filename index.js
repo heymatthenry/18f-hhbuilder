@@ -1,5 +1,6 @@
 /* use strict */
 const formLib = {
+  // Initialize state
   household: [],
 
   init: function () {
