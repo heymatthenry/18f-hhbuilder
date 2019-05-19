@@ -70,7 +70,7 @@ var formLib = {
    */
   validateRelationship: function (rel) {
     var relationships = ["self", "spouse", "child", "parent", "grandparent", "other"];
-    var isValid = relationships.includes(rel);
+    var isValid = relationships.indexOf(rel) >= 0;
     var relField = document.forms[0].elements.rel;
     relField.style = isValid ? "" : "border: 1px dashed red";
     this.state.errors.rel = isValid ? "" : "Please select your relationship to the household member from the list";
