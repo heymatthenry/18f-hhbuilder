@@ -2,6 +2,7 @@
 const formLib = {
   // Initialize state
   household: [],
+  errors: {},
 
   init: function () {
     this.attachEvents();
@@ -9,8 +10,25 @@ const formLib = {
   },
 
   initializeDom: function () {
-    const addBtn = document.getElementsByClassName('add')[0];
-    addBtn.setAttribute('type', 'button'); // prevent attribute-less button from triggering submit
+    const builder = document.getElementsByClassName('builder')[0];
+
+    // prevent attribute-less button from triggering submit
+    const addBtn = builder.getElementsByClassName('add')[0];
+    addBtn.setAttribute('type', 'button');
+
+    // Add container for error flash
+    const ol = builder.getElementsByTagName('ol')[0];
+    const errCtr = document.createElement('ul');
+    errCtr.id = 'error-ctr';
+    builder.insertBefore(errCtr, ol);
+  },
+
+  attachEvents: function () {
+    const btnAdd = document.getElementsByClassName('add')[0];
+    btnAdd.addEventListener('click', this.handleAdd)
+
+    const form = document.forms[0];
+    form.addEventListener('submit', this.handleSubmit);
   },
 
   capitalize: function (str) {
@@ -21,6 +39,7 @@ const formLib = {
     const isValid = age > 0;
     const ageField = document.forms[0].elements.age;
     ageField.style = isValid ? "" : "border: 1px dashed red";
+    this.errors.age = isValid ? "" : "Age must be a number greater than zero."
     return isValid;
   },
 
@@ -29,16 +48,10 @@ const formLib = {
     const isValid = relationships.includes(rel);
     const relField = document.forms[0].elements.rel;
     relField.style = isValid ? "" : "border: 1px dashed red";
+    this.errors.rel = isValid ? "" : "Please select your relationship to the household member from the list";
     return isValid;
   },
 
-  attachEvents: function () {
-    const btnAdd = document.getElementsByClassName('add')[0];
-    btnAdd.addEventListener('click', this.handleAdd)
-    const form = document.forms[0];
-
-    form.addEventListener('submit', this.handleSubmit);
-  },
 
   handleSubmit: function (e) {
     e.preventDefault();
@@ -54,12 +67,25 @@ const formLib = {
     const isValidAge = formLib.validateAge(age);
     const isValidRel = formLib.validateRelationship(rel);
 
+    const errCtr = document.getElementById('error-ctr');
+    errCtr.innerHTML = '';
+
     if (isValidAge && isValidRel) {
       formLib.addHHMember({
         hhid: Math.floor(Math.random() * 1000000),
         age: age,
         rel: formLib.capitalize(rel),
         smoker: form.elements.smoker.checked ? "Yes" : "No",
+      })
+    } else {
+      Object.keys(formLib.errors).map((i) => {
+        const err = formLib.errors[i];
+        if (err !== '') {
+          const li = document.createElement('li');
+          li.style = 'color: red';
+          li.innerText = formLib.errors[i];
+          errCtr.appendChild(li);
+        }
       })
     }
   },
