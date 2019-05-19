@@ -6,6 +6,10 @@ var formLib = {
     errors: {},
   },
 
+  /**
+  * Not really a "constructor" as such–
+  * just specifying methods that should be run on initialzation
+  */
   init: function () {
     this.attachEvents();
     this.initializeDom();
