@@ -11,7 +11,13 @@ var formLib = {
     this.initializeDom();
   },
 
+  /**
+  * Create necessary DOM elements/attributes to support showing validation
+  * errors and prevent form from submitting on clicking "add" button
+  */
   initializeDom: function () {
+
+    // NOTE to code reviewer: I'm assuming IE9+ by using getElementsByClassName
     var builder = document.getElementsByClassName('builder')[0];
 
     // prevent attribute-less button from triggering submit
@@ -27,6 +33,9 @@ var formLib = {
     builder.insertBefore(errCtr, ol);
   },
 
+  /**
+   * Register event handlers for "add" button and form submission
+   */
   attachEvents: function () {
     var btnAdd = document.getElementsByClassName('add')[0];
     btnAdd.addEventListener('click', this.handleAdd)
@@ -35,10 +44,18 @@ var formLib = {
     form.addEventListener('submit', this.handleSubmit);
   },
 
+  /**
+   * Utitlity function to capitalize a string
+   * @param {string} str 
+   */
   capitalize: function (str) {
     return str[0].toUpperCase() + str.slice(1, str.length)
   },
 
+  /**
+   * Ensure age is greater than 0 
+   * @param {number} age 
+   */
   validateAge: function (age) {
     var isValid = age > 0;
     var ageField = document.forms[0].elements.age;
@@ -47,6 +64,10 @@ var formLib = {
     return isValid;
   },
 
+  /**
+   * Ensure relationship is one of those specified in the select list 
+   * @param {string} rel 
+   */
   validateRelationship: function (rel) {
     var relationships = ["self", "spouse", "child", "parent", "grandparent", "other"];
     var isValid = relationships.includes(rel);
@@ -56,13 +77,19 @@ var formLib = {
     return isValid;
   },
 
-
+  /**
+   * Handle form submission 
+   * @param {event} e 
+   */
   handleSubmit: function (e) {
     e.preventDefault();
     var debug = document.querySelector('pre.debug');
     debug.innerText = JSON.stringify(formLib.state.household);
   },
 
+  /**
+   * Handle click of the "add" button. Invokes form validation; manages display of validation errors.
+   */
   handleAdd: function () {
     var form = document.forms[0];
     var age = +form.elements.age.value;
@@ -94,6 +121,10 @@ var formLib = {
     }
   },
 
+  /**
+   * Adds household member to DOM and to state.
+   * @param {object} hhObj 
+   */
   addHHMember: function (hhObj) {
     var ol = document.getElementsByClassName('household')[0];
 
@@ -111,6 +142,10 @@ var formLib = {
     this.state.household.push(hhObj);
   },
 
+  /**
+   * Remove specified household member from DOM and from state
+   * @param {number} id 
+   */
   removeHHMember: function (id) {
     var li = document.querySelector("li[data-hhid='" + id + "']");
     li.parentNode.removeChild(li)
