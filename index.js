@@ -1,8 +1,10 @@
 /* use strict */
 const formLib = {
   // Initialize state
-  household: [],
-  errors: {},
+  state: {
+    household: [],
+    errors: {},
+  },
 
   init: function () {
     this.attachEvents();
@@ -41,7 +43,7 @@ const formLib = {
     const isValid = age > 0;
     const ageField = document.forms[0].elements.age;
     ageField.style = isValid ? "" : "border: 1px dashed red";
-    this.errors.age = isValid ? "" : "Age must be a number greater than zero."
+    this.state.errors.age = isValid ? "" : "Age must be a number greater than zero."
     return isValid;
   },
 
@@ -50,7 +52,7 @@ const formLib = {
     const isValid = relationships.includes(rel);
     const relField = document.forms[0].elements.rel;
     relField.style = isValid ? "" : "border: 1px dashed red";
-    this.errors.rel = isValid ? "" : "Please select your relationship to the household member from the list";
+    this.state.errors.rel = isValid ? "" : "Please select your relationship to the household member from the list";
     return isValid;
   },
 
@@ -58,7 +60,7 @@ const formLib = {
   handleSubmit: function (e) {
     e.preventDefault();
     const debug = document.querySelector('pre.debug');
-    debug.innerText = JSON.stringify(formLib.household);
+    debug.innerText = JSON.stringify(formLib.state.household);
   },
 
   handleAdd: function () {
@@ -80,12 +82,12 @@ const formLib = {
         smoker: form.elements.smoker.checked ? "Yes" : "No",
       })
     } else {
-      Object.keys(formLib.errors).map((i) => {
-        const err = formLib.errors[i];
+      Object.keys(formLib.state.errors).map((i) => {
+        const err = formLib.state.errors[i];
         if (err !== '') {
           const li = document.createElement('li');
           li.style = 'color: red';
-          li.innerText = formLib.errors[i];
+          li.innerText = formLib.state.errors[i];
           errCtr.appendChild(li);
         }
       })
@@ -118,15 +120,15 @@ const formLib = {
 
     li.appendChild(btnRemove);
     ol.appendChild(li);
-    this.household.push(hhObj);
+    this.state.household.push(hhObj);
   },
 
   removeHHMember(id) {
     const li = document.querySelector("li[data-hhid='" + id + "']");
     li.parentNode.removeChild(li)
-    this.household.map((mem, i) => {
+    this.state.household.map((mem, i) => {
       if ((mem.hhid) === id) {
-        formLib.household.splice(i, 1);
+        formLib.state.household.splice(i, 1);
       }
     })
   }
