@@ -1,5 +1,5 @@
 /* use strict */
-const formLib = {
+var formLib = {
   // Initialize state
   state: {
     household: [],
@@ -12,15 +12,15 @@ const formLib = {
   },
 
   initializeDom: function () {
-    const builder = document.getElementsByClassName('builder')[0];
+    var builder = document.getElementsByClassName('builder')[0];
 
     // prevent attribute-less button from triggering submit
-    const addBtn = builder.getElementsByClassName('add')[0];
+    var addBtn = builder.getElementsByClassName('add')[0];
     addBtn.setAttribute('type', 'button');
 
     // Add container for error flash
-    const ol = builder.getElementsByTagName('ol')[0];
-    const errCtr = document.createElement('ul');
+    var ol = builder.getElementsByTagName('ol')[0];
+    var errCtr = document.createElement('ul');
     errCtr.id = 'error-ctr';
     errCtr.setAttribute('role', 'alert');
     errCtr.setAttribute('aria-atomic', 'true');
@@ -28,10 +28,10 @@ const formLib = {
   },
 
   attachEvents: function () {
-    const btnAdd = document.getElementsByClassName('add')[0];
+    var btnAdd = document.getElementsByClassName('add')[0];
     btnAdd.addEventListener('click', this.handleAdd)
 
-    const form = document.forms[0];
+    var form = document.forms[0];
     form.addEventListener('submit', this.handleSubmit);
   },
 
@@ -40,17 +40,17 @@ const formLib = {
   },
 
   validateAge: function (age) {
-    const isValid = age > 0;
-    const ageField = document.forms[0].elements.age;
+    var isValid = age > 0;
+    var ageField = document.forms[0].elements.age;
     ageField.style = isValid ? "" : "border: 1px dashed red";
     this.state.errors.age = isValid ? "" : "Age must be a number greater than zero."
     return isValid;
   },
 
   validateRelationship: function (rel) {
-    const relationships = ["self", "spouse", "child", "parent", "grandparent", "other"];
-    const isValid = relationships.includes(rel);
-    const relField = document.forms[0].elements.rel;
+    var relationships = ["self", "spouse", "child", "parent", "grandparent", "other"];
+    var isValid = relationships.includes(rel);
+    var relField = document.forms[0].elements.rel;
     relField.style = isValid ? "" : "border: 1px dashed red";
     this.state.errors.rel = isValid ? "" : "Please select your relationship to the household member from the list";
     return isValid;
@@ -59,19 +59,19 @@ const formLib = {
 
   handleSubmit: function (e) {
     e.preventDefault();
-    const debug = document.querySelector('pre.debug');
+    var debug = document.querySelector('pre.debug');
     debug.innerText = JSON.stringify(formLib.state.household);
   },
 
   handleAdd: function () {
-    const form = document.forms[0];
-    const age = +form.elements.age.value;
-    const rel = form.elements.rel.value;
+    var form = document.forms[0];
+    var age = +form.elements.age.value;
+    var rel = form.elements.rel.value;
 
-    const isValidAge = formLib.validateAge(age);
-    const isValidRel = formLib.validateRelationship(rel);
+    var isValidAge = formLib.validateAge(age);
+    var isValidRel = formLib.validateRelationship(rel);
 
-    const errCtr = document.getElementById('error-ctr');
+    var errCtr = document.getElementById('error-ctr');
     errCtr.innerHTML = '';
 
     if (isValidAge && isValidRel) {
@@ -82,10 +82,10 @@ const formLib = {
         smoker: form.elements.smoker.checked ? "Yes" : "No",
       })
     } else {
-      Object.keys(formLib.state.errors).map((i) => {
-        const err = formLib.state.errors[i];
+      Object.keys(formLib.state.errors).map(function (i) {
+        var err = formLib.state.errors[i];
         if (err !== '') {
-          const li = document.createElement('li');
+          var li = document.createElement('li');
           li.style = 'color: red';
           li.innerText = formLib.state.errors[i];
           errCtr.appendChild(li);
@@ -94,26 +94,14 @@ const formLib = {
     }
   },
 
-  createHHTable: function () {
-    const tbl = document.createElement('table');
-    const tr = document.createElement('tr');
-    ["Age", "Size", "Smoker?", "Remove Household Member"].map((txt) => {
-      const th = document.createElement('th');
-      th.innerText = txt;
-      tr.appendChild(th);
-    });
-    tbl.appendChild(tr);
-    document.body.appendChild(tbl).id = 'hh-members';
-  },
-
   addHHMember: function (hhObj) {
-    let ol = document.getElementsByClassName('household')[0];
+    var ol = document.getElementsByClassName('household')[0];
 
-    const li = document.createElement('li');
+    var li = document.createElement('li');
     li.setAttribute("data-hhid", hhObj.hhid);
     li.innerText = hhObj.age + ' ' + hhObj.rel + ' ' + hhObj.smoker;
 
-    const btnRemove = document.createElement('button');
+    var btnRemove = document.createElement('button');
     btnRemove.setAttribute('type', 'button');
     btnRemove.innerText = 'Remove';
     btnRemove.addEventListener('click', function () { formLib.removeHHMember(hhObj.hhid) });
@@ -123,10 +111,10 @@ const formLib = {
     this.state.household.push(hhObj);
   },
 
-  removeHHMember(id) {
-    const li = document.querySelector("li[data-hhid='" + id + "']");
+  removeHHMember: function (id) {
+    var li = document.querySelector("li[data-hhid='" + id + "']");
     li.parentNode.removeChild(li)
-    this.state.household.map((mem, i) => {
+    this.state.household.map(function (mem, i) {
       if ((mem.hhid) === id) {
         formLib.state.household.splice(i, 1);
       }
