@@ -20,6 +20,8 @@ const formLib = {
     const ol = builder.getElementsByTagName('ol')[0];
     const errCtr = document.createElement('ul');
     errCtr.id = 'error-ctr';
+    errCtr.setAttribute('role', 'alert');
+    errCtr.setAttribute('aria-atomic', 'true');
     builder.insertBefore(errCtr, ol);
   },
 
