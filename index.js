@@ -35,6 +35,8 @@ const formLib = {
 
   handleSubmit: function (e) {
     e.preventDefault();
+    const debug = document.querySelector('pre.debug');
+    debug.innerText = JSON.stringify(formLib.household);
   },
 
   handleAdd: function () {
