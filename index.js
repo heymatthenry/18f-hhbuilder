@@ -69,7 +69,7 @@ var formLib = {
   },
 
   /**
-   * Ensure relationship is one of those specified in the select list 
+   * Ensure relationship is one of those specified in the select list
    * @param {string} rel 
    */
   validateRelationship: function (rel) {
