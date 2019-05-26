@@ -13,6 +13,7 @@ var HHbuilder = {
   init: function () {
     this.attachEvents();
     this.initializeDom();
+    this.populateHousehold();
   },
 
   /**
@@ -88,7 +89,9 @@ var HHbuilder = {
   handleSubmit: function (e) {
     e.preventDefault();
     var debug = document.querySelector('pre.debug');
-    debug.innerText = JSON.stringify(HHbuilder.state.household);
+    var hhJson = JSON.stringify(HHbuilder.state.household);
+    debug.innerText = hhJson;
+    localStorage.setItem('household', hhJson);
   },
 
   /**
@@ -158,7 +161,28 @@ var HHbuilder = {
         HHbuilder.state.household.splice(i, 1);
       }
     })
+  },
+
+  /**
+   * Read from localStorage and populate household and debug area
+   */
+  populateHousehold: function () {
+    var debug = document.querySelector('pre.debug');
+
+    try {
+      var hhString = localStorage.getItem("household");
+      debug.innerText = hhString;
+      var hhList = JSON.parse(hhString)
+      if (hhList.length > 0) {
+        hhList.map(function (hhObj) {
+          HHbuilder.addHHMember(hhObj);
+        })
+      }
+    } catch (e) {
+      debug.innerText = "";
+    }
   }
+
 };
 
 // Check whether we're running in the test env (i.e. an iframe)

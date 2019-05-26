@@ -6,6 +6,7 @@ describe("Household Builder", function () {
 
   afterEach(function () {
     document.body.innerHTML = '';
+    localStorage.setItem('household', []);
   });
 
   describe("should modify the DOM by adding", function () {
