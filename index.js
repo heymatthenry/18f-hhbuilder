@@ -1,5 +1,5 @@
 /* use strict */
-var formLib = {
+var HHbuilder = {
   // Initialize state
   state: {
     household: [],
@@ -88,7 +88,7 @@ var formLib = {
   handleSubmit: function (e) {
     e.preventDefault();
     var debug = document.querySelector('pre.debug');
-    debug.innerText = JSON.stringify(formLib.state.household);
+    debug.innerText = JSON.stringify(HHbuilder.state.household);
   },
 
   /**
@@ -99,26 +99,26 @@ var formLib = {
     var age = +form.elements.age.value;
     var rel = form.elements.rel.value;
 
-    var isValidAge = formLib.validateAge(age);
-    var isValidRel = formLib.validateRelationship(rel);
+    var isValidAge = HHbuilder.validateAge(age);
+    var isValidRel = HHbuilder.validateRelationship(rel);
 
     var errCtr = document.getElementById('error-ctr');
     errCtr.innerHTML = '';
 
     if (isValidAge && isValidRel) {
-      formLib.addHHMember({
+      HHbuilder.addHHMember({
         hhid: Math.floor(Math.random() * 1000000),
         age: age,
-        rel: formLib.capitalize(rel),
+        rel: HHbuilder.capitalize(rel),
         smoker: form.elements.smoker.checked ? "Yes" : "No",
       })
     } else {
-      Object.keys(formLib.state.errors).map(function (i) {
-        var err = formLib.state.errors[i];
+      Object.keys(HHbuilder.state.errors).map(function (i) {
+        var err = HHbuilder.state.errors[i];
         if (err !== '') {
           var li = document.createElement('li');
           li.style = 'color: red';
-          li.innerText = formLib.state.errors[i];
+          li.innerText = HHbuilder.state.errors[i];
           errCtr.appendChild(li);
         }
       })
@@ -139,7 +139,7 @@ var formLib = {
     var btnRemove = document.createElement('button');
     btnRemove.setAttribute('type', 'button');
     btnRemove.innerText = 'Remove';
-    btnRemove.addEventListener('click', function () { formLib.removeHHMember(hhObj.hhid) });
+    btnRemove.addEventListener('click', function () { HHbuilder.removeHHMember(hhObj.hhid) });
 
     li.appendChild(btnRemove);
     ol.appendChild(li);
@@ -155,10 +155,13 @@ var formLib = {
     li.parentNode.removeChild(li)
     this.state.household.map(function (mem, i) {
       if ((mem.hhid) === id) {
-        formLib.state.household.splice(i, 1);
+        HHbuilder.state.household.splice(i, 1);
       }
     })
   }
 };
 
-formLib.init();
+// Check whether we're running in the test env (i.e. an iframe)
+if (window.self == window.top) {
+  HHbuilder.init();
+}

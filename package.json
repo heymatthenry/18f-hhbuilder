@@ -4,13 +4,18 @@
   "description": "18f code review project",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/karma/bin/karma start hhbuilder.conf.js --single-run",
+    "watch": "./node_modules/karma/bin/karma start hhbuilder.conf.js",
+    "start": "http-server ."
   },
   "author": "Matt Henry",
   "license": "ISC",
   "devDependencies": {
+    "http-server": "^0.11.1",
     "jasmine-core": "^3.4.0",
+    "karma": "^4.1.0",
     "karma-chrome-launcher": "^2.2.0",
+    "karma-html2js-preprocessor": "^1.1.0",
     "karma-jasmine": "^2.0.1"
   }
 }
